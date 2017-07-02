@@ -1,4 +1,4 @@
-package Activities;
+package activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -9,8 +9,8 @@ import com.greiner_co.dailynews.R;
 
 import java.util.ArrayList;
 
-import Adapters.NewsAdapter;
-import Models.News;
+import adapters.NewsAdapter;
+import models.News;
 
 public class NewsActivity extends AppCompatActivity {
 

@@ -1,4 +1,4 @@
-package Adapters;
+package adapters;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -12,7 +12,7 @@ import com.greiner_co.dailynews.R;
 
 import java.util.ArrayList;
 
-import Models.News;
+import models.News;
 
 /**
  * Custom Adapter for RecyclerView to provide news data to the list

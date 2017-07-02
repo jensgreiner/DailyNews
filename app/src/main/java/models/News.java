@@ -1,4 +1,4 @@
-package Models;
+package models;
 
 /**
  * POJO to store all the news retrieved from the API
