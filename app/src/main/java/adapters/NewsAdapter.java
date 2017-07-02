@@ -62,13 +62,20 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
 
     @Override
     public int getItemCount() {
+        if (mNewsArrayList == null) {
+            return 0;
+        }
         return mNewsArrayList.size();
     }
 
     public void swapData(List<News> newNewsList) {
         if (mNewsArrayList != null && !mNewsArrayList.isEmpty()) {
             mNewsArrayList.clear();
-            mNewsArrayList.addAll(newNewsList);
+            if (newNewsList == null) {
+                mNewsArrayList = new ArrayList<News>();
+            } else {
+                mNewsArrayList.addAll(newNewsList);
+            }
         } else {
             mNewsArrayList = (ArrayList<News>) newNewsList;
         }

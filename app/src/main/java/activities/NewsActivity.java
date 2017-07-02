@@ -7,6 +7,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -34,6 +35,7 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
     private static final String NEWS_API_KEY = "test";
 
     private RecyclerView mRecyclerView;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private TextView mEmptyTextView;
@@ -46,6 +48,7 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news);
 
+        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
         mRecyclerView = (RecyclerView) findViewById(R.id.news_recycler_view);
         mEmptyTextView = (TextView) findViewById(R.id.empty_text_view);
         mLoadingSpinner = (ProgressBar) findViewById(R.id.loading_spinner);
@@ -56,6 +59,22 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
         mNewsArrayList = new ArrayList<News>();
         mAdapter = new NewsAdapter(mNewsArrayList);
         mRecyclerView.setAdapter(mAdapter);
+
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if (internetIsConnected()) {
+                    getLoaderManager().restartLoader(0, null, NewsActivity.this);
+                } else {
+                    mSwipeRefreshLayout.setRefreshing(false);
+                    if (mAdapter instanceof NewsAdapter) {
+                        ((NewsAdapter) mAdapter).swapData(new ArrayList<News>());
+                    }
+                    mEmptyTextView.setText(R.string.no_internet_connection_text);
+                    mEmptyTextView.setVisibility(View.VISIBLE);
+                }
+            }
+        });
 
         if (internetIsConnected()) {
 
@@ -100,6 +119,8 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
 
         // Hide the progressBar spinner after loading
         mLoadingSpinner.setVisibility(View.GONE);
+
+        mSwipeRefreshLayout.setRefreshing(false);
 
         mEmptyTextView.setText(getString(R.string.empty_list_text));
         if (newsList != null && !newsList.isEmpty()) {
