@@ -88,6 +88,12 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
         notifyDataSetChanged();
     }
 
+    /**
+     * Formats the date format retrieved from JSON data and converts it into current timezone format
+     *
+     * @param jsonDateString JSON format of the date data
+     * @return formatted date string converted to default locale
+     */
     private String formatDate(String jsonDateString) {
         if (jsonDateString != null && !jsonDateString.isEmpty()) {
             String jsonDatePattern = "yyyy-MM-dd'T'HH:mm:ss'Z'";
