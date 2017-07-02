@@ -3,6 +3,7 @@ package adapters;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,8 +11,12 @@ import android.widget.TextView;
 
 import com.greiner_co.dailynews.R;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import models.News;
 
@@ -43,7 +48,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
         holder.newsTitle.setText(currentNews.getNewsTitle());
         holder.newsSection.setText(currentNews.getNewsSection());
         holder.newsAuthor.setText(currentNews.getNewsAuthor());
-        holder.newsDate.setText(currentNews.getNewsDate());
+        holder.newsDate.setText(formatDate(currentNews.getNewsDate()));
 
         holder.layout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,6 +77,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
         if (mNewsArrayList != null && !mNewsArrayList.isEmpty()) {
             mNewsArrayList.clear();
             if (newNewsList == null) {
+                //noinspection Convert2Diamond
                 mNewsArrayList = new ArrayList<News>();
             } else {
                 mNewsArrayList.addAll(newNewsList);
@@ -82,12 +88,28 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
         notifyDataSetChanged();
     }
 
+    private String formatDate(String jsonDateString) {
+        if (jsonDateString != null && !jsonDateString.isEmpty()) {
+            String jsonDatePattern = "yyyy-MM-dd'T'HH:mm:ss'Z'";
+            SimpleDateFormat jsonFormatter = new SimpleDateFormat(jsonDatePattern, Locale.getDefault());
+            try {
+                Date parsedJsonDate = jsonFormatter.parse(jsonDateString);
+                String finalDatePattern = "yyyy-MM-dd HH:mm";
+                SimpleDateFormat finalDateFormatter = new SimpleDateFormat(finalDatePattern, Locale.getDefault());
+                return finalDateFormatter.format(parsedJsonDate);
+            } catch (ParseException e) {
+                Log.e(LOG_TAG, "Error parsing JSON date.", e);
+            }
+        }
+        return "";
+    }
+
     static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView newsTitle;
-        TextView newsSection;
-        TextView newsAuthor;
-        TextView newsDate;
-        View layout;
+        final TextView newsTitle;
+        final TextView newsSection;
+        final TextView newsAuthor;
+        final TextView newsDate;
+        final View layout;
 
         ViewHolder(View itemView) {
             super(itemView);

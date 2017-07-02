@@ -34,10 +34,8 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
     private static final String NEWS_API_URL = "http://content.guardianapis.com/search";
     private static final String NEWS_API_KEY = "test";
 
-    private RecyclerView mRecyclerView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
     private TextView mEmptyTextView;
     private ProgressBar mLoadingSpinner;
 
@@ -49,13 +47,14 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
         setContentView(R.layout.activity_news);
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
-        mRecyclerView = (RecyclerView) findViewById(R.id.news_recycler_view);
+        RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.news_recycler_view);
         mEmptyTextView = (TextView) findViewById(R.id.empty_text_view);
         mLoadingSpinner = (ProgressBar) findViewById(R.id.loading_spinner);
 
-        mLayoutManager = new LinearLayoutManager(this);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
+        //noinspection Convert2Diamond
         mNewsArrayList = new ArrayList<News>();
         mAdapter = new NewsAdapter(mNewsArrayList);
         mRecyclerView.setAdapter(mAdapter);
@@ -152,10 +151,5 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
         // Get details on the currently active default data network
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
-    }
-
-    private void clearData() {
-        mNewsArrayList.clear();
-        mAdapter.notifyDataSetChanged();
     }
 }

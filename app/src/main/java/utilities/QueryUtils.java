@@ -181,7 +181,12 @@ public class QueryUtils {
                     }
 
                     // Extract the value for the key called "date"
-                    String date = news.getString("webPublicationDate");
+                    String date;
+                    if (news.has("webPublicationDate")) {
+                        date = news.getString("webPublicationDate");
+                    } else {
+                        date = "";
+                    }
 
                     // Extract the value for the key called "webUrl"
                     String url = news.getString("webUrl");
