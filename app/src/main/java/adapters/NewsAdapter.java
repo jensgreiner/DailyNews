@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.greiner_co.dailynews.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import models.News;
 
@@ -62,6 +63,16 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
     @Override
     public int getItemCount() {
         return mNewsArrayList.size();
+    }
+
+    public void swapData(List<News> newNewsList) {
+        if (mNewsArrayList != null && !mNewsArrayList.isEmpty()) {
+            mNewsArrayList.clear();
+            mNewsArrayList.addAll(newNewsList);
+        } else {
+            mNewsArrayList = (ArrayList<News>) newNewsList;
+        }
+        notifyDataSetChanged();
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
